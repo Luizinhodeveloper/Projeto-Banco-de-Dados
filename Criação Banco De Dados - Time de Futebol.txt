@@ -1,0 +1,153 @@
+CREATE TABLE `futebol_db`.`clube` (
+  `idTime` INT NOT NULL AUTO_INCREMENT,
+  `nome_time` VARCHAR(45) NOT NULL,
+  `fundacao` DATE NOT NULL,
+  `estadio` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idTime`));
+
+CREATE TABLE `futebol_db`.`arbitragem` (
+  `idarbitragem` INT NOT NULL AUTO_INCREMENT,
+  `nome_arbitro` VARCHAR(45) NOT NULL,
+  `cpf_arbitro` VARCHAR(12) NOT NULL,
+  PRIMARY KEY (`idarbitragem`));
+
+CREATE TABLE `futebol_db`.`treinador` (
+  `idtreinador` INT NOT NULL AUTO_INCREMENT,
+  `nome_treinador` VARCHAR(45) NOT NULL,
+  `data_nascimento` DATE NOT NULL,
+  `time_id` INT NOT NULL,
+  PRIMARY KEY (`idtreinador`),
+  INDEX `fk_time_id_idx` (`time_id` ASC) VISIBLE,
+  CONSTRAINT `fk_time_id`
+    FOREIGN KEY (`time_id`)
+    REFERENCES `futebol_db`.`clube` (`idTime`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`jogador` (
+  `idjogador` INT NOT NULL AUTO_INCREMENT,
+  `nome_jogador` VARCHAR(100) NOT NULL,
+  `posicao` VARCHAR(45) NOT NULL,
+  `data_nascimento` DATE NOT NULL,
+  `idade` INT NOT NULL,
+  `time_id` INT NOT NULL,
+  PRIMARY KEY (`idjogador`),
+  INDEX `fk_time_id2_idx` (`time_id` ASC) VISIBLE,
+  CONSTRAINT `fk_time_id2`
+    FOREIGN KEY (`time_id`)
+    REFERENCES `futebol_db`.`clube` (`idTime`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`treinamento` (
+  `idtreinamento` INT NOT NULL AUTO_INCREMENT,
+  `data_treinamento` DATE NOT NULL,
+  `tipo_treinamento` VARCHAR(45) NOT NULL,
+  `time_id` INT NOT NULL,
+  PRIMARY KEY (`idtreinamento`),
+  INDEX `fk_time_id3_idx` (`time_id` ASC) VISIBLE,
+  CONSTRAINT `fk_time_id3`
+    FOREIGN KEY (`time_id`)
+    REFERENCES `futebol_db`.`clube` (`idTime`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`partida` (
+  `idpartida` INT NOT NULL AUTO_INCREMENT,
+  `data_partida` DATE NOT NULL,
+  `hora_partida` TIME NOT NULL,
+  `id_time_casa` INT NOT NULL,
+  `id_time_visitante` INT NOT NULL,
+  `gols_time_casa` INT NOT NULL,
+  `gols_time_visitante` INT NOT NULL,
+  `arbitro_id` INT NOT NULL,
+  PRIMARY KEY (`idpartida`),
+  INDEX `fk_id_time_casa_idx` (`id_time_casa` ASC) VISIBLE,
+  INDEX `fk_id_time_visitante_idx` (`id_time_visitante` ASC) VISIBLE,
+  INDEX `fk_arbitro_id_idx` (`arbitro_id` ASC) VISIBLE,
+  CONSTRAINT `fk_id_time_casa`
+    FOREIGN KEY (`id_time_casa`)
+    REFERENCES `futebol_db`.`clube` (`idTime`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_id_time_visitante`
+    FOREIGN KEY (`id_time_visitante`)
+    REFERENCES `futebol_db`.`clube` (`idTime`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_arbitro_id`
+    FOREIGN KEY (`arbitro_id`)
+    REFERENCES `futebol_db`.`arbitragem` (`idarbitragem`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`escalacao` (
+  `idescalacao` INT NOT NULL AUTO_INCREMENT,
+  `partida_id` INT NOT NULL,
+  `time_id` INT NOT NULL,
+  `jogador_id` INT NOT NULL,
+  `posicao_campo` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idescalacao`),
+  INDEX `fk_time_id4_idx` (`time_id` ASC) VISIBLE,
+  INDEX `fk_partida_id_idx` (`partida_id` ASC) VISIBLE,
+  INDEX `fk_jogador_id_idx` (`jogador_id` ASC) VISIBLE,
+  CONSTRAINT `fk_time_id4`
+    FOREIGN KEY (`time_id`)
+    REFERENCES `futebol_db`.`clube` (`idTime`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_partida_id`
+    FOREIGN KEY (`partida_id`)
+    REFERENCES `futebol_db`.`partida` (`idpartida`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_jogador_id`
+    FOREIGN KEY (`jogador_id`)
+    REFERENCES `futebol_db`.`jogador` (`idjogador`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`lesao` (
+  `idlesao` INT NOT NULL AUTO_INCREMENT,
+  `jogador_id` INT NOT NULL,
+  `data_lesao` DATE NOT NULL,
+  `tipo_lesao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idlesao`),
+  INDEX `fk_jogador_id2_idx` (`jogador_id` ASC) VISIBLE,
+  CONSTRAINT `fk_jogador_id2`
+    FOREIGN KEY (`jogador_id`)
+    REFERENCES `futebol_db`.`jogador` (`idjogador`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`participacao_treinamento` (
+  `idparticipacao_treinamento` INT NOT NULL AUTO_INCREMENT,
+  `treinamento_id` INT NOT NULL,
+  `jogador_id` INT NOT NULL,
+  PRIMARY KEY (`idparticipacao_treinamento`),
+  INDEX `fk_treinamento_id_idx` (`treinamento_id` ASC) VISIBLE,
+  INDEX `fk_jogador_id3_idx` (`jogador_id` ASC) VISIBLE,
+  CONSTRAINT `fk_treinamento_id`
+    FOREIGN KEY (`treinamento_id`)
+    REFERENCES `futebol_db`.`treinamento` (`idtreinamento`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_jogador_id3`
+    FOREIGN KEY (`jogador_id`)
+    REFERENCES `futebol_db`.`jogador` (`idjogador`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `futebol_db`.`contrato` (
+  `idcontrato` INT NOT NULL AUTO_INCREMENT,
+  `jogador_id` INT NOT NULL,
+  `inicio_contrato` DATE NOT NULL,
+  `fim_contrato` DATE NOT NULL,
+  `salario` FLOAT NOT NULL,
+  PRIMARY KEY (`idcontrato`),
+  INDEX `fk_jogador_id4_idx` (`jogador_id` ASC) VISIBLE,
+  CONSTRAINT `fk_jogador_id4`
+    FOREIGN KEY (`jogador_id`)
+    REFERENCES `futebol_db`.`jogador` (`idjogador`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

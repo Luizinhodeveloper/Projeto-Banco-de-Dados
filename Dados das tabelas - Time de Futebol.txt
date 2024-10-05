@@ -1,0 +1,56 @@
+INSERT INTO clube(nome_time, fundacao, estadio)
+VALUES
+('FC Barcelona', '1899-11-29', 'Camp Nou'),
+('Real Madrid', '1902-03-06', 'Santiago Bernabéu'),
+('São Paulo FC', '1930-01-25', 'MorumBIS');
+
+INSERT INTO arbitragem(nome_arbitro, cpf_arbitro)
+VALUES
+('Wilton Pereira Sampaio', '12345678901');
+
+INSERT INTO contrato(jogador_id, inicio_contrato, fim_contrato, salario)
+VALUES
+(1, '2023-07-02', '2026-06-30', '1600000'),
+(2, '2024-07-16', '2029-07-26', '15000000'),
+(3, '2022-07-16', '2026-07-18', '23000000'),
+(4, '2018-07-20', '2027-07-20', '20000000');
+
+INSERT INTO escalacao(partida_id, jogador_id, time_id, posicao_campo)
+VALUES
+(1, 1, 1, 'Meio-Campo'),
+(1, 2, 2, 'Atacante'),
+(1, 3, 1, 'Atacante'),
+(1, 4, 2, 'Ponta-Esquerda');
+
+INSERT INTO jogador(nome_jogador, posicao, data_nascimento, idade, time_id)
+VALUES
+('Lamine Yamal', 'Meio-Campo', '2007-07-13', 17, 1),
+('Kylian Mbappé', 'Atacante', '1998-12-20', 25, 2),
+('Robert Lewandowski', 'Atacante', '1988-08-21', 36, 1),
+('Vini Jr', 'Ponta-Esquerda', '2000-07-12', 24, 2);
+
+INSERT INTO lesao(jogador_id, data_lesao, tipo_lesao)
+VALUES
+(1, 2024-05-06', 'Estiramento na coxa'),
+(3, 2024-04-19', 'Estiramento na coxa'),
+(2, 2024-05-06', Rompimento de ligamento');
+
+INSERT INTO participacao_treino(treinamento_id, jogador_id)
+VALUES
+(1, 2),
+(1, 4);
+
+INSERT INTO partida(data_partida, hora_partida, id_time_casa, id_time_visitante, gols_time_casa, gols_time_visitante, arbitro_id)
+VALUES
+('2024-09-15', '16:00', 1, 2, 1, 3, 1);
+
+INSERT INTO treinador(nome_treinador, data_nascimento, time_id)
+VALUES
+('Hansi Flick', '1965-02-24', 1),
+('Carlo Ancelotti', '1959-06-10', 2)
+
+INSERT INTO treinamento(data_treinamento, tipo_treinamento, time_id)
+VALUES
+('2024-09-12', 'Treino tático', 2)
+('2024-09-12', 'Marcação individual', 2)
+('2024-09-10', 'Treino tático', 1)
